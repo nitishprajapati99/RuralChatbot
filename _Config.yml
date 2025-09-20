@@ -1,2 +1,4 @@
 exclude:
-  - node_modules
+  - node_modules/
+  - Chatbot-Server/node_modules/
+  - chatbot-app/node_modules/
