@@ -9,13 +9,13 @@ dotenv.config();
 //This function is to Register the user 
 const Signup = async(req,res)=>{
     try{
-    const {name,email,password} = req.body;
+    const {name,email,password ,role} = req.body;
     const UserExist = await userSchema.findOne({email:email});
     if (UserExist) return res.status(401).json({message:"User is already exist"});
  //password hasing using bcrypt
     const saltValue = 5;
     const hashedPassword = await bcrypt.hash(password,saltValue);
-    const NewUser = new userSchema({name:name,email:email,password:hashedPassword});
+    const NewUser = new userSchema({name:name,email:email,password:hashedPassword , role:role});
     await userSchema.create(NewUser);
     res.status(201).json({message:"User Registerd successfully"});
     }
@@ -27,7 +27,7 @@ const Signup = async(req,res)=>{
 
 const Login = async(req,res)=>{
     try{
-    const{email,password} = req.body;
+    const{email,password,role} = req.body;
     const user = await userSchema.findOne({email});
     if(!user) return res.status(404).json({message:"User is not found"});
     

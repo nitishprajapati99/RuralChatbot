@@ -1,11 +1,20 @@
 const mongoose = require("mongoose");
 
 const faqSchema = new mongoose.Schema({
-  question : String,
+  question : {
+    type:String,
+    required:true,
+  },
 
   answers: {
-    en: String,
-    hi: String
+    en:{
+    type:String,
+    required:true,
+  },
+    hi: {
+    type:String,
+    required:true
+  }
   },
 
   tags:[String],

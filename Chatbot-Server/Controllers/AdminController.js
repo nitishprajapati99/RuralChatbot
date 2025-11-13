@@ -8,14 +8,14 @@ dotenv.config();
 //signup controller
 const Signup = async(req,res)=>{
     try{
-    const{name , email , password} = req.body;
+    const{name , email , password ,role} = req.body;
     const admin = await Admin.findOne({email});
     if(admin) return res.status(401).json({message:"Admin is already exists"});
     //password hassing
     const saltValue = 6;
     const hashedPassword = await bcrypt.hash(password,saltValue);
     
-    const newAdmin = new Admin({name:name , email:email , password:hashedPassword});
+    const newAdmin = new Admin({name:name , email:email , password:hashedPassword , role:role});
     await Admin.create(newAdmin);
      return res.status(201).json({message:"Admin Created successfully"});
     }catch(err){
@@ -25,7 +25,7 @@ const Signup = async(req,res)=>{
 
 //Login controller
 const Login = async(req , res) =>{
-    const{email , password} = req.body;
+    const{email , password , role} = req.body;
     const admin = await Admin.findOne({email});
     if(!admin) return res.status(404).json({message:"User is not found"});
     //compare the password with hashed password
@@ -37,7 +37,7 @@ const Login = async(req , res) =>{
     const adminToken = await Jwt.sign({email} , secretKey , {expiresIn : "1h"});
      
     //response
-    res.status(200).json({message:"Admin is LoggedIn Successfully" , token:adminToken});
+    res.status(200).json({message:"Admin is LoggedIn Successfully" , Token:adminToken});
 }
 
 module.exports = {Signup , Login};

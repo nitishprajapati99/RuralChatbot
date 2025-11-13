@@ -8,7 +8,6 @@ const verifyToken = async(req , res ,next)=>{
     }
     const token = authHeader.split(' ')[1];//extract token part from the Authorization inside header
     const decode = Jwt.verify(token , process.env.SECRET_KEY);
-
     req.user = decode;
     
     // Proceed to next middleware or controller

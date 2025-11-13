@@ -36,3 +36,21 @@
     transform: rotate(360deg);
   }
 }
+/* Navbar css */
+.header{
+  background-color: #61dafb;
+  display: flex;
+  direction: horizontal;
+} 
+/* button css */
+ul li{
+  list-style: none;
+}
+.nav-btn{
+  margin: 15px;
+  border-radius: 4px;
+  color: black;
+  text-decoration: none;
+  background: transparent;
+  border-style: none;
+}

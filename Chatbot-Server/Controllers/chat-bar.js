@@ -20,12 +20,13 @@ const chatbar = async (req , resp)=>{
             threshold:0.4
         })
         const result  = fuse.search(question);
+        // console.log(result);
         if(result.length>0){
             faq = result[0].item;
         }
-           
-    }
-
+        
+      }
+      
     //if no match found
 if(!faq){
   const allFaqs = await FAQ.find({});
@@ -41,6 +42,7 @@ if(!faq){
   })
 }
 }
+// console.log(faq);
 // 3. If no similar found
      if(faq){
      resp.json({ answer: faq.answers[lang] || faq.answers.en });
