@@ -16,7 +16,7 @@ const AddFaq = () => {
     e.preventDefault();
     console.log({ question: teachQ, en: teachEn, hi: teachHi, synonyms: synonyms, tags: tags });
 
-    const response = await fetch("http://localhost:5000/faq/add", {
+    const response = await fetch("https://rural-chatbot.onrender.com/faq/add", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
