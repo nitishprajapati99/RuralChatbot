@@ -45,6 +45,12 @@ const AddFaq = () => {
     setTags([]);
     // setShowTeachForm(false);
   };
+
+  // Admin checker
+  const isAdmin = localStorage.getItem("isAdmin") === "true";
+  if (!isAdmin) {
+  return <h2>You are not allowed to access this page</h2>;
+}
   return (
     <div className="p-2 border mt-2 bg-light rounded">
       <h6 className="text-dark">📝 Teach Bot a New Answer</h6>

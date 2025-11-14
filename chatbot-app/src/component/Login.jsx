@@ -54,13 +54,22 @@ const Login = () => {
 
     alert(result.message);
      if(Token){
-      localStorage.setItem("isAdmin" , formData.role);
+
+      // set admin as true
+      if(formData.role ==="admin")
+        {
+      localStorage.setItem("isAdmin" , "true")
+      //set user as false
+    }else if(formData.role ==="user")
+      {
+        (localStorage.setItem("isAdmin" , "false"));
+      }
     navigate('/chatbot');}
   };
 
   return (
     <Container className="d-flex justify-content-center align-items-center vh-100">
-      <Card className="login-card shadow-lg">
+      <Card className=" login-card shadow-lg">
         <Card.Body>
           <h3 className="text-center mb-4">🌾 Gramin Chatbot Login</h3>
 

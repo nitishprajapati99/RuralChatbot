@@ -20,7 +20,8 @@ const Navbar = () => {
         <>
 
           <li>
-            {localStorage.getItem("isAdmin") ==="admin"?
+            <Link to="/" className='nav-btn ms-auto'>Home</Link>
+            {localStorage.getItem("isAdmin") ==="true"?
             (<Link to ="/addfaq" className='nav-btn'>Post FAQ</Link>)
             :("")}
            <button className="nav-btn" onClick={handleLogout}>Logout</button>
@@ -31,6 +32,7 @@ const Navbar = () => {
         (
         <>
         <li className='ms-auto'>
+           <Link to="/" className='nav-btn ms-auto'>Home</Link>
           <Link to="/signup" className='nav-btn ms-auto'>Signup</Link>
         
           <Link to="/login" className='nav-btn ms-auto'>Login</Link>
