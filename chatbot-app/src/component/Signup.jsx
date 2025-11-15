@@ -22,7 +22,7 @@ function SignupForm() {
     let response;
     if (formData.role === "user") {
 
-      response = await fetch("http://localhost:4000/api/v1/users/signup", {
+      response = await fetch("https://chatbot-f4ah.onrender.com/api/v1/users/signup", {
         method: "POST",
         headers: {
           'Content-Type': 'application/json',
@@ -36,7 +36,7 @@ function SignupForm() {
       });
     }
     else if (formData.role === "admin") {
-      response = await fetch("http://localhost:4000/api/v1/admin/signup", {
+      response = await fetch("https://chatbot-f4ah.onrender.com/api/v1/admin/signup", {
         method: "POST",
         headers: {
           'Content-Type': 'application/json',
