@@ -16,7 +16,7 @@ const AddFaq = () => {
     e.preventDefault();
     console.log({ question: teachQ, en: teachEn, hi: teachHi, synonyms: synonyms, tags: tags });
 
-    const response = await fetch("http://localhost:4000/faq/add", {
+    const response = await fetch("https://chatbot-f4ah.onrender.com//faq/add", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
