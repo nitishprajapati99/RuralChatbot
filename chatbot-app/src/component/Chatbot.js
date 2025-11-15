@@ -55,7 +55,7 @@ const Chatbot = () => {
     const newMessages = [...messages, { text: input, sender: "user" }];
     setMessages(newMessages);
     try {
-      const response = await fetch("http://localhost:4000/chatbot/chat", {
+      const response = await fetch("https://chatbot-f4ah.onrender.com/chatbot/chat", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
