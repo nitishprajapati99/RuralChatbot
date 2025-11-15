@@ -55,7 +55,7 @@ const Chatbot = () => {
     const newMessages = [...messages, { text: input, sender: "user" }];
     setMessages(newMessages);
     try {
-      const response = await fetch("https://rural-chatbot.onrender.com/chatbot/chat", {
+      const response = await fetch("http://localhost:4000/chatbot/chat", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -66,7 +66,7 @@ const Chatbot = () => {
       )
       const data = await response.json();
       if (data.answer.includes("माफ़") || data.answer.toLowerCase().includes("sorry")) {
-        // console.log("API Response:", data.answer);
+        console.log("API Response:", data.answer);
         const fallbackMsg = { sender: "bot", text: data.answer };
         setMessages((prev) => [...prev, fallbackMsg]);
 
