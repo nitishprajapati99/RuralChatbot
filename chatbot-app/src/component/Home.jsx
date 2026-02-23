@@ -3,12 +3,23 @@ import { useNavigate } from 'react-router-dom';
 
  const  Home = () =>{
   const Navigate = useNavigate();
-  const loginchecker = ()=>{
-    if(localStorage.getItem("Token")){
-      Navigate('/chatbot')
-    }else{
+  const loginchecker = async()=>{
+    if(!localStorage.getItem("Token")){
       Navigate('/login')
     }
+      const response = await fetch("http://localhost:5000/chatbot/chat", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+           Authorization: `Bearer ${localStorage.getItem("Token") || ""}`
+        }})
+        if(response.status === 401 || response.status === 403){
+          localStorage.removeItem("Token");
+          Navigate('/login')
+        }
+        
+      Navigate('/chatbot')
+    
   }
 return (
     <div className="container mt-4">

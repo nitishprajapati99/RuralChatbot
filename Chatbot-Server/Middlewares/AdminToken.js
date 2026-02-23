@@ -12,7 +12,7 @@ const AdminVerify = async(req , res , next) =>{
  const adminToken = authHeader.split(' ')[1];
    const decode =  Jwt.verify(adminToken ,process.env.AdminSecretKey );
     
-   req.admin = decode;
+   req.admin = decode;  
    
 // Proceed to next middleware or controller
    next();
