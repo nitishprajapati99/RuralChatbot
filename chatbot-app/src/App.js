@@ -10,15 +10,28 @@ import Signup from './component/Signup';
 import Home from './component/Home';
 import Login from './component/Login';
 import AddFaq from './component/AddFaq';
+<<<<<<< HEAD
 import Profile from './component/Profile';  
 import MySchemes from './component/my-scheme';
 import ViewProfile from './component/viewProfile';
+=======
+>>>>>>> c76eb25f88df4969f2a67a50e8292ac0c526b4ea
 
 function App() {
   return (
     <div>
       <BrowserRouter>
         
+<<<<<<< HEAD
+=======
+
+          <Navbar />
+          <Routes>
+            <Route element={<PrivateComponent />}>
+              <Route element={<FaqGate />}>
+                <Route path="/addfaq" element={<AddFaq />} />
+              </Route>
+>>>>>>> c76eb25f88df4969f2a67a50e8292ac0c526b4ea
 
           <Navbar />
           <Routes>

@@ -1,6 +1,7 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 
+<<<<<<< HEAD
 const Home = () => {
 const Navigate = useNavigate();
 const loginchecker = () => {
@@ -148,6 +149,28 @@ margin-top: 30px;
 }
 `;
 
+=======
+ const  Home = () =>{
+  const Navigate = useNavigate();
+  const loginchecker = async()=>{
+    if(!localStorage.getItem("Token")){
+      Navigate('/login')
+    }
+      const response = await fetch("http://localhost:5000/chatbot/chat", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+           Authorization: `Bearer ${localStorage.getItem("Token") || ""}`
+        }})
+        if(response.status === 401 || response.status === 403){
+          localStorage.removeItem("Token");
+          Navigate('/login')
+        }
+        
+      Navigate('/chatbot')
+    
+  }
+>>>>>>> c76eb25f88df4969f2a67a50e8292ac0c526b4ea
 return (
 <div className="home-container">
 {/* Injected styles for this component */}

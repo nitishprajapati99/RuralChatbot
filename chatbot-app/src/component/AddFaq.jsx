@@ -26,6 +26,7 @@ const AddFaq = () => {
   const [loading, setLoading] = useState(false);
   const [successMsg, setSuccessMsg] = useState("");
 
+<<<<<<< HEAD
   // Handle nested updates
   const handleChange = (path, value) => {
     const keys = path.split(".");
@@ -41,6 +42,28 @@ const AddFaq = () => {
         }
       });
       return updated;
+=======
+  const [tags, setTags] = useState([]);
+  // Teach Form Submission
+  const handleTech = async (e) => {
+    e.preventDefault();
+    console.log({ question: teachQ, en: teachEn, hi: teachHi, synonyms: synonyms, tags: tags });
+
+    const response = await fetch("http://localhost:5000/faq/add", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${localStorage.getItem("Token")}`
+
+      },
+      body: JSON.stringify({
+        question: teachQ,
+        en: teachEn,
+        hi: teachHi,
+        synonyms: synonyms,
+        tags: tags
+      })
+>>>>>>> c76eb25f88df4969f2a67a50e8292ac0c526b4ea
     });
   };
 

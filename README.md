@@ -180,6 +180,44 @@ JWT_SECRET=your_secret_key
 cd server
 npm start
 ```
+<<<<<<< HEAD
+=======
+
+#### Start Frontend
+
+```bash
+cd client
+npm start
+```
+
+---
+
+## 📌 Future Improvements
+
+* Voice-based interaction (for low literacy users)
+* Regional language support
+* AI-based recommendation engine (NLP)
+* Mobile app version
+* Offline mode support
+
+---
+
+## 🤝 Contribution
+
+Contributions are welcome. Feel free to fork the repo and submit a PR.
+
+---
+
+## 📄 License
+
+This project is open-source and available Github
+
+---
+
+## 💡 Final Note
+
+This is not just a chatbot — it's a step toward **making government services accessible to everyone**, especially underserved rural communities.
+>>>>>>> c76eb25f88df4969f2a67a50e8292ac0c526b4ea
 
 #### Start Frontend
 

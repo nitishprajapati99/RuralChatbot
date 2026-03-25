@@ -27,11 +27,37 @@ const Login = () => {
         ? "http://localhost:5000/api/v1/admin/login" 
         : "http://localhost:5000/api/v1/users/login";
 
+<<<<<<< HEAD
       const response = await fetch(url, {
+=======
+    if (formData.role === "user") {
+      var response = await fetch("http://localhost:5000/api/v1/users/login", {
+>>>>>>> c76eb25f88df4969f2a67a50e8292ac0c526b4ea
         method: "POST",
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(formData),
       });
+<<<<<<< HEAD
+=======
+    }
+    else if (formData.role === "admin") {
+      response = await fetch("http://localhost:5000/api/v1/admin/login", {
+        method: "POST",
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          email: formData.email,
+          password: formData.password,
+          role: formData.role
+        })
+      });
+    }
+    const result = await response.json();
+    // console.log("result ", result);
+    const Token = result.Token;
+    localStorage.setItem("Token", Token);
+>>>>>>> c76eb25f88df4969f2a67a50e8292ac0c526b4ea
 
       const result = await response.json();
 
