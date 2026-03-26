@@ -1,64 +1,85 @@
 const FAQ  = require("../Models/faq.js");
 const Fuse = require('fuse.js');
 const similarity = require('string-similarity');
-const chatbar = async (req , resp)=>{
-    const { question , lang} = req.body;
+const AppError = require("../utils/AppError");
 
-  try{
+const chatbar = async (req, res) => {
+  const { question, lang } = req.body;
+// console.log("Received question:", question, "Language:", lang);
+  if (!question) {
+    return next(new AppError("Question is required" , 400));
+  }
+
+  try {
     let faq = await FAQ.findOne({
-      $or:[{question:{$regex: question , $options: 'i'}},
-      {synonyms:{$regex: question , $options: 'i'}},
-      {tags:{$regex: question , $options: 'i'}}
-      ]});
-    // console.log("Direct Match:", faq);
+      $or: [
+        { "schemeName.en": { $regex: question, $options: "i" } },
+        { "schemeName.hi": { $regex: question, $options: "i" } },
+        { category: { $regex: question, $options: "i" } },
+        { tags: { $regex: question, $options: "i" } }
+      ]
+    }).lean();
+    // console.log("Initial FAQ search result:", faq);
 
-    // Fuzzy Search using Fuse.js
-    if(!faq){
-        const allFaqs = await FAQ.find();
-        const fuse = new Fuse(allFaqs , {
-            keys:['question','synonyms','tags'],
-            threshold:0.4
-        })
-        const result  = fuse.search(question);
-        // console.log(result);
-        if(result.length>0){
-            faq = result[0].item;
-        }
-        
+    if (!faq) {
+      const allFaqs = await FAQ.find().lean();
+    //  console.log("Total FAQs fetched for fuzzy search:", allFaqs.length);
+      const fuse = new Fuse(allFaqs, {
+        keys: ["schemeName.en", "schemeName.hi", "category", "tags"],
+        threshold: 0.4
+      });
+
+      const result = fuse.search(question);
+// console.log("Fuzzy search results:", result);
+      if (result.length > 0) {
+        faq = result[0].item;
       }
-      
-    //if no match found
-if(!faq){
-  const allFaqs = await FAQ.find({});
-  const questions = allFaqs.map(f => f.question);
-  const matchedFaqs = similarity.findBestMatch(question,questions)
-//  console.log("Best Match:", matchedFaqs.bestMatch);
-  if( matchedFaqs.bestMatch.rating > 0.2){
-    const suggestedFaq = matchedFaqs.ratings.filter(r=> r.rating > 0.2).map(r=> r.target);
-    // console.log("Suggested FAQ:", suggestedFaq);
-    return resp.json({
-      answer:lang==="en"? " I don’t know this yet. Did you mean one of these?":"मुझे अभी तक यह नहीं पता। क्या आपका मतलब इनमें से किसी एक से था?",
-        suggestedFaq
-  })
-}
-}
-// console.log(faq);
-// 3. If no similar found
-     if(faq){
-     resp.json({ answer: faq.answers[lang] || faq.answers.en });
-    }else {
-      return resp.json({
-        answer:
-          lang === "hi"
-            ? "माफ़ , करें मुझे इसका उत्तर नहीं पता।"
-            : "Sorry, I don’t know the answer."
+
+      // Similarity check
+      if (!faq) {
+        const Schemes = allFaqs.map(f => f.schemeName);
+        const matchedFaqs = similarity.findBestMatch(question, Schemes.map);
+
+        if (matchedFaqs.bestMatch.rating > 0.4) {
+          const suggestedFaq = matchedFaqs.ratings
+            .filter(r => r.rating > 0.4)
+            .map(r => r.target);
+
+          return res.json({
+            answer:
+              lang === "en"
+                ? "I don’t know this yet. Did you mean one of these?"
+                : "मुझे अभी तक यह नहीं पता। क्या आपका मतलब इनमें से किसी एक से था?",
+            suggestedFaq
+          });
+        }
+      }
+    }
+
+    if (faq) {
+      // console.log("FAQ found:", faq);
+      return res.json({
+        answer: { description: faq.description[lang], requiredDocuments: faq.requiredDocuments,
+          eligibilityCriteria: faq.eligibility, benefits: faq.benefits ,applyLink: faq.applyLink,
+          category: faq.category, ministry: faq.ministry
+         }
+        
+        || faq.description.en
       });
     }
-}
-catch(err){
-    resp.status(500).json({ error: err.message });
-}
-}
+
+    return res.json({
+      answer:"Not found"
+        // lang === "hi"
+        //   ? "माफ़ करें, मुझे इसका उत्तर नहीं पता।"
+        //   : "Sorry, I don’t know the answer."
+    });
+
+  } catch (err) {
+    return next(new AppError(err.message, 500));
+  }
+};
 
 
 module.exports = chatbar;
+

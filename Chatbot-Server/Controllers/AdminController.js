@@ -2,42 +2,48 @@ const Admin = require('../Models/Admin-schema');
 const bcrypt = require('bcrypt');
 const Jwt = require('jsonwebtoken');
 const dotenv = require('dotenv');
+const AppError = require('../utils/AppError');
 
 dotenv.config();
 
 //signup controller
-const Signup = async(req,res)=>{
-    try{
-    const{name , email , password ,role} = req.body;
-    const admin = await Admin.findOne({email});
-    if(admin) return res.status(401).json({message:"Admin is already exists"});
-    //password hassing
-    const saltValue = 6;
-    const hashedPassword = await bcrypt.hash(password,saltValue);
-    
-    const newAdmin = new Admin({name:name , email:email , password:hashedPassword , role:role});
-    await Admin.create(newAdmin);
-     return res.status(201).json({message:"Admin Created successfully"});
-    }catch(err){
-        res.status(500).json({message:"Internal Server Error" , Error:err.message});
+const Signup = async (req, res , next) => {
+    try {
+        const { name, email, password, role } = req.body;
+        // console.log(role);
+        const admin = await Admin.findOne({ email }).lean();
+        if (admin) return next(new AppError("Admin already exists" , 400));
+        //password hassing
+        const saltValue = 6;
+        const hashedPassword = await bcrypt.hash(password, saltValue);
+
+        const newAdmin = new Admin({ name: name, email: email, password: hashedPassword, role: role });
+        await Admin.create(newAdmin);
+        return res.status(201).json({ message: "Admin Created successfully" });
+    } catch (err) {
+        return next(new AppError(err.message, 500));
     }
 }
 
 //Login controller
-const Login = async(req , res) =>{
-    const{email , password , role} = req.body;
-    const admin = await Admin.findOne({email});
-    if(!admin) return res.status(404).json({message:"User is not found"});
+const Login = async (req, res , next) => {
+    try{
+    const { email, password, role } = req.body;
+    const admin = await Admin.findOne({ email }).lean();
+    if (!admin) return next(new AppError("Admin not found" , 404));
     //compare the password with hashed password
-    const trueAdmin = await bcrypt.compare(password , admin.password);
-    if(!trueAdmin) return res.status(400).json({message:"Invalid Credential"});
-    
+    const trueAdmin = await bcrypt.compare(password, admin.password);
+    if (!trueAdmin) return next(new AppError("Invalid Credential" , 400));
+
     //Json web token Authentication
-    const secretKey = process.env.AdminSecretKey;
-    const adminToken = await Jwt.sign({email} , secretKey , {expiresIn : "1h"});
-     
+    const secretKey = process.env.SECRET_KEY;
+    const adminToken = await Jwt.sign({ id: admin._id, role: admin.role }, secretKey, { expiresIn: "10h" });
+
     //response
-    res.status(200).json({message:"Admin is LoggedIn Successfully" , Token:adminToken});
+    res.status(200).json({ message: "Admin is LoggedIn Successfully", token: adminToken });
+    }catch(err){
+        return next(new AppError(err.message, 500));
+    }
 }
 
-module.exports = {Signup , Login};
+module.exports = { Signup, Login };

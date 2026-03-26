@@ -1,94 +1,255 @@
-# Rural Smart Chatbot — Empowering Villages with Technology  
-###  Built for Smart India Hackathon | Theme: Computer & IT Technology  
+# 🌾 Rural Chatbot – Smart Government Scheme Assistant
 
-> “Technology for everyone — even for those who can’t read or type.”  
-A multilingual voice-enabled chatbot designed to help **rural citizens** access **government schemes, farming guidance, and basic information** easily — using **voice and local language**, not text.
+## 🚩 Problem
 
----
+Millions of people in rural areas struggle to access government schemes due to:
 
-## Overview
+* Lack of awareness
+* Complex eligibility criteria
+* Language barriers
+* Poor digital literacy
 
-In many rural areas, people with **low literacy levels** struggle to access digital services or official information.  
-The **Rural Smart Chatbot** solves this by allowing users to **speak** in Hindi or English and receive voice/text replies instantly.
+Most government portals are **too complex, fragmented, and not user-friendly** for rural users.
 
-Built with **Node.js, Express, React, and MongoDB**, this project bridges the communication gap between **technology and rural communities**.
+## ✅ Solution
 
----
+Rural Chatbot simplifies access to government schemes by:
 
-##  Key Features
-
-- 🗣️ **Voice-based Interaction** — Speak to the chatbot and get answers in your language.  
-- 🌐 **Multilingual Support** — Currently supports **English and Hindi**, easily extendable to other languages.  
-- 📚 **FAQ-based Knowledge System** — Stores government scheme data and common questions in MongoDB.  
-- 💬 **Smart Suggestion System** — Suggests similar questions if user input doesn’t match exactly.  
-- 🧠 **Self-learning Mode** — Admins can teach new answers directly from the interface.  
-- ⚙️ **Modular Architecture** — Separate frontend, backend, and database layers for scalability.  
-- 💻 **Offline/Screen Kiosk Vision** — Future goal: deploy on touch-screen kiosks in rural areas.
+* Understanding user queries in simple language
+* Matching users with relevant schemes based on their profile
+* Providing multilingual responses (English & Hindi)
+* Reducing dependency on manual assistance
 
 ---
 
-##  Tech Stack
+## 📌 Overview
 
-**Frontend:** React + Bootstrap  
-**Backend:** Node.js + Express  
-**Database:** MongoDB (Mongoose ODM)  
-**Speech Recognition:** Web Speech API  
-**AI/NLP (optional):** OpenAI / Dialogflow  
-**Hosting:** Render / Vercel / MongoDB Atlas  
+Rural Chatbot is an **AI-powered assistant** that helps users discover government schemes tailored to their eligibility.
+
+Instead of searching through multiple websites, users can:
+
+* Chat naturally
+* Provide basic profile details
+* Get personalized scheme recommendations instantly
+
+---
+
+## ✨ Key Features
+
+* 🤖 **Conversational Interface**
+
+  * Chat-based interaction for ease of use
+
+* 🎯 **Smart Scheme Matching**
+
+  * Filters schemes based on:
+
+    * Age
+    * Income
+    * Category
+    * Gender
+    * Occupation
+    * Location
+
+* 🌐 **Multilingual Support**
+
+  * English + Hindi responses
+
+* 🧠 **Admin Learning System**
+
+  * Admin can add new schemes dynamically
+
+* 👤 **User Profile System**
+
+  * Stores user data for accurate recommendations
+
+* ⚡ **Real-time Response**
+
+  * Fast and relevant answers
+
+---
+
+## 🛠 Tech Stack
+
+### Frontend
+
+* React.js
+* React Bootstrap
+
+### Backend
+
+* Node.js
+* Express.js
+
+### Database
+
+* MongoDB (Mongoose)
+
+### Other
+
+* REST APIs
+* JWT Authentication
 
 ---
 
 ## 📁 Project Structure
+
+```
 rural-chatbot/
 │
-├── backend/
-│ ├── models/
-│ ├── routes/
-│ ├── app.js
-│ └── server.js
+├── client/                # React frontend
+│   ├── components/
+│   ├── pages/
+│   └── services/
 │
-├── frontend/
-│ ├── src/
-│ │ ├── components/
-│ │ ├── App.js
-│ │ └── Chatbot.js
-│ └── package.json
+├── server/                # Node backend
+│   ├── controllers/
+│   ├── models/
+│   ├── routes/
+│   └── middleware/
 │
-└── README.md
-
-
-
+├── config/                # DB & environment configs
+├── README.md
+└── package.json
+```
 
 ---
 
-## 🧠 How It Works
+## ⚙️ How It Works
 
-1. User speaks or types a question.  
-2. The chatbot processes input → detects language → searches MongoDB for similar FAQs.  
-3. If found → returns the answer in user’s language.  
-4. If not → suggests closest matches or stores query for admin review.  
-5. Admin can later “teach” the chatbot new responses.
+1. User logs in and fills profile
+2. User asks a query (e.g., "schemes for farmers")
+3. System:
+
+   * Extracts intent
+   * Matches with stored schemes
+   * Filters using eligibility criteria
+4. Returns best-matching schemes
+
+Admin can:
+
+* Add new schemes
+* Update scheme details
 
 ---
 
-## ⚡ Installation Guide
+## 🚀 Installation Guide
+
+### 1. Clone the repository
 
 ```bash
-# Clone repository
-git clone https://github.com/yourusername/rural-chatbot.git
+git clone https://github.com/your-username/rural-chatbot.git
 cd rural-chatbot
+```
 
-# Install backend dependencies
-cd backend
+### 2. Install dependencies
+
+#### Backend
+
+```bash
+cd server
 npm install
+```
 
-# Install frontend dependencies
-cd ../frontend
+#### Frontend
+
+```bash
+cd client
 npm install
+```
 
-# Run backend
+---
+
+### 3. Setup Environment Variables
+
+Create `.env` file in server:
+
+```
+PORT=5000
+MONGO_URI=your_mongodb_connection
+JWT_SECRET=your_secret_key
+```
+
+---
+
+### 4. Run the Project
+
+#### Start Backend
+
+```bash
+cd server
 npm start
+```
+<<<<<<< HEAD
+=======
 
-# Run frontend
-npm run dev
+#### Start Frontend
 
+```bash
+cd client
+npm start
+```
+
+---
+
+## 📌 Future Improvements
+
+* Voice-based interaction (for low literacy users)
+* Regional language support
+* AI-based recommendation engine (NLP)
+* Mobile app version
+* Offline mode support
+
+---
+
+## 🤝 Contribution
+
+Contributions are welcome. Feel free to fork the repo and submit a PR.
+
+---
+
+## 📄 License
+
+This project is open-source and available Github
+
+---
+
+## 💡 Final Note
+
+This is not just a chatbot — it's a step toward **making government services accessible to everyone**, especially underserved rural communities.
+>>>>>>> c76eb25f88df4969f2a67a50e8292ac0c526b4ea
+
+#### Start Frontend
+
+```bash
+cd client
+npm start
+```
+
+---
+
+## 📌 Future Improvements
+
+* Voice-based interaction (for low literacy users)
+* Regional language support
+* AI-based recommendation engine (NLP)
+* Mobile app version
+* Offline mode support
+
+---
+
+## 🤝 Contribution
+
+Contributions are welcome. Feel free to fork the repo and submit a PR.
+
+---
+
+## 📄 License
+
+This project is open-source and available Github
+
+---
+
+## 💡 Final Note
+
+This is not just a chatbot — it's a step toward **making government services accessible to everyone**, especially underserved rural communities.
