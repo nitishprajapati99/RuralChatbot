@@ -17,7 +17,8 @@ const MySchemes = () => {
             try {
                 // Fetch from your backend API
                 // NOTE: In production, you'd likely use an environment variable for the base URL
-                const response = await fetch('http://localhost:5000/v1/schemes/related-schemes',{
+                // const response = await fetch('http://localhost:5000/v1/schemes/related-schemes',{
+                const response = await fetch('https://chatbot-f4ah.onrender.com',{
                     method: 'GET',
                     headers: {
                         'Content-Type': 'application/json',
