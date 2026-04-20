@@ -26,8 +26,8 @@ function SignupForm() {
     try {
       // Dynamic URL selection based on role
       const url = formData.role === "admin" 
-        ? "https://chatbot-f4ah.onrender.com" 
-        : "https://chatbot-f4ah.onrender.com";
+        ? "https://your-backend.onrender.com/api/admin/signup" 
+        : "https://your-backend.onrender.com/api/users/signup";
       // const url = formData.role === "admin" 
       //   ? "http://localhost:5000/api/v1/admin/signup" 
       //   : "http://localhost:5000/api/v1/users/signup";
