@@ -25,8 +25,8 @@ const UserSchema = new mongoose.Schema({
     income: Number,
     category: String,
     gender: String,
-    occupation: String,
-    education: String,
+    occupation: Array,
+    education: Array,
     ruralUrban: String
   },
   ProfileCompleted: {

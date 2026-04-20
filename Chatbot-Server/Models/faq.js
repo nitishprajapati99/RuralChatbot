@@ -19,7 +19,8 @@ const faqSchema = new mongoose.Schema({
     maxIncome: Number,
     category: [String],
     gender: String,
-    occupation: [String]
+    occupation: [String],
+    education: [String]
   },
    benefits: {
     en: String,
@@ -36,14 +37,22 @@ const faqSchema = new mongoose.Schema({
   },
 });
 faqSchema.index({
-    "eligibility.category": 1,
-    "eligibility.gender": 1,
     "eligibility.state": 1,
-    "eligibility.maxIncome": 1,
-    "eligibility.minAge": 1,
-    "eligibility.maxAge": 1
+    "eligibility.category": 1,
+    "eligibility.gender": 1
 });
 // 2. Separate Index for Occupation (Since it's a second array)
-faqSchema.index({ "eligibility.occupation": 1 });
+faqSchema.index({ 
+    schemeName: "text", 
+    tags: "text", 
+    "description.en": "text" 
+}, {
+    weights: {
+        schemeName: 10, // Make matches in the Name more important
+        tags: 5
+    },
+    name: "ChatbotSearchIndex"
+});
+
 
 module.exports = mongoose.model("FAQ", faqSchema);

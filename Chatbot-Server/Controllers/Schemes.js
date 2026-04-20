@@ -1,7 +1,7 @@
 const User = require('../Models/User-schema');
 const faq = require('../Models/faq.js');
 const AppError = require('../utils/AppError.js');
-const getRelatedSchemes = async (req, res , next) => {
+const getRelatedSchemes = async (req, res, next) => {
     try {
         // edge case for unauthenticated users, return general schemes without personalization for guests useers
         if (!req.user) {
@@ -26,23 +26,76 @@ const getRelatedSchemes = async (req, res , next) => {
             if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
                 age--;
             }
-            // console.log("USER AGE:", age);
+            console.log("USER AGE:", age);
+            console.log("USER PROFILE:", user.profile);
             // Personalized filtering
 
-            schemes = await faq.find(
+            schemes = await faq.aggregate([
                 {
-                    "eligibility.state": { $in: [user.profile.state, "All"] },
-                    "eligibility.category": { $in: [user.profile.category, "All"] },
-                    "eligibility.minAge": { $lte: age },
-                    "eligibility.maxAge": { $gte: age },
-                    "eligibility.maxIncome": { $gte: user.profile.income },
-                    "eligibility.gender": { $in: [user.profile.gender, "All"] },
-                    "eligibility.occupation": { $in: [...user.profile.occupation, "All"] }
-                })
-                .lean().select('schemeName ministry category eligibility.maxIncome documentRequired applyLink')
+                    $match: {
+                        "eligibility.state": { $in: [user.profile.state, "All"] },
+                        "eligibility.category": { $in: [user.profile.category, "All"] },
+                        "eligibility.gender": { $in: [user.profile.gender, "All"] }
+
+                    }
+                },
+                {
+                    $addFields: {
+                        isEligible: {
+
+                            $and: [
+                                { $lte: ["$eligibility.minAge", age] },
+                                { $gte: ["$eligibility.maxAge", age] },
+                                { $gte: ["$eligibility.maxIncome", user.profile.income] }
+
+                                ,
+                                {
+                                    $or: [
+                                        // If the scheme says "All", everyone is eligible regardless of job
+                                        { $eq: ["$eligibility.occupation", ["All"]] },
+                                        { $in: ["$eligibility.occupation", user.profile.occupation] },
+                                        // Handle cases where the database stores "All" as a single string instead of array
+                                        { $eq: ["$eligibility.occupation", "All"] }
+                                    ]
+
+                                }
+                            ]
+                        }
+                    }
+                },
+                {
+                    $sort: { isEligible: -1, schemeName: 1 }
+                },
+                {
+
+                    $project: {
+                        schemeName: 1,
+                        "description.en": 1,
+                        isEligible: 1,
+                        ministry: 1,
+                        category: 1,
+                        documentRequired: 1,
+                        applyLink: 1,
+                        "eligibility.maxIncome": 1,
+                        "eligibility.minAge": 1,
+                        "eligibility.maxAge": 1,
+                    }
+                }
+            ]).limit(10);
+            // {
+            //     "eligibility.state": { $in: [user.profile.state, "All"] },
+            //     "eligibility.category": { $in: [user.profile.category, "All"] },
+            //     "eligibility.minAge": { $lte: age },
+            //     "eligibility.maxAge": { $gte: age },
+            //     "eligibility.maxIncome": { $gte: user.profile.income },
+            //     "eligibility.gender": { $in: [user.profile.gender, "All"] },
+            //     "eligibility.occupation": { $in: [...user.profile.occupation, "All"] }
+            // }
+            // .lean().select('schemeName ministry category eligibility.maxIncome documentRequired applyLink')
 
             // console.log("FILTERED SCHEMES:", schemes);
             console.time("Filtering Time");
+            console.log("Filtered SCHEMES:", schemes);
             res.status(200).json({ schemes });
             console.timeEnd("Filtering Time");
         } else {
@@ -54,7 +107,7 @@ const getRelatedSchemes = async (req, res , next) => {
             console.timeEnd("General Fetch Time");
         }
     } catch (err) {
-        return next(new AppError(err.message, 500));  
+        return next(new AppError(err.message, 500));
     }
 }
 

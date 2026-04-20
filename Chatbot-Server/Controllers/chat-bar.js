@@ -3,7 +3,7 @@ const Fuse = require('fuse.js');
 const similarity = require('string-similarity');
 const AppError = require("../utils/AppError");
 
-const chatbar = async (req, res) => {
+const chatbar = async (req, res , next) => {
   const { question, lang } = req.body;
 // console.log("Received question:", question, "Language:", lang);
   if (!question) {
@@ -11,6 +11,14 @@ const chatbar = async (req, res) => {
   }
 
   try {
+//     const schemes = await FAQ.find(
+//     { $text: { $search: question } }, // Uses the Text Index
+//     { score: { $meta: "textScore" } }  // Calculates how relevant the result is
+// )
+// .sort({ score: { $meta: "textScore" } }) // Puts the best match at the top
+// .limit(5);
+// console.log("Search results:", schemes);
+// res.json({"schemes":schemes});
     let faq = await FAQ.findOne({
       $or: [
         { "schemeName.en": { $regex: question, $options: "i" } },

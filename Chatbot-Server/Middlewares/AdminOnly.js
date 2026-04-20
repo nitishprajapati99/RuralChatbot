@@ -1,11 +1,17 @@
+
+const RoleAccessService = require('../Service/RoleAccessService');
+const roleAccessService = new RoleAccessService;
 const adminOnly = (req,res,next)=>{
-
-  if(req.user.role !== "admin"){
-      return res.status(403).json({
-         message:"Admin access required"
-      })
-  }
-
+try{
+  
+  roleAccessService.AdminAccess(req.user.role);
+  
   next()
+}catch(err){
+  res.status(500).json({
+    message:err.message,
+    success:false
+  })
 }
-module.exports = adminOnly;
+}
+module.exports = adminOnly
