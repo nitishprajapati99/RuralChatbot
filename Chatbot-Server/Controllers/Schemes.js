@@ -26,17 +26,24 @@ const getRelatedSchemes = async (req, res, next) => {
             if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
                 age--;
             }
-            console.log("USER AGE:", age);
-            console.log("USER PROFILE:", user.profile);
+            // console.log("USER AGE:", age);
+            // console.log("USER PROFILE:", user.profile);
             // Personalized filtering
-
+            //pagination 
+            //    const page = parseInt(req.query.params);
+            //    const limit = parseInt(req.query.params);
+            //    const skip = (page-1) *limit;
+            //    console.log(page , skip , limit);
             schemes = await faq.aggregate([
                 {
                     $match: {
                         "eligibility.state": { $in: [user.profile.state, "All"] },
                         "eligibility.category": { $in: [user.profile.category, "All"] },
-                        "eligibility.gender": { $in: [user.profile.gender, "All"] }
-
+                        "eligibility.gender": { $in: [user.profile.gender, "All"] },
+  
+                        "eligibility.minAge": { $lte: age },
+                        "eligibility.maxAge": { $gte: age },
+                        "eligibility.maxIncome": { $gte: user.profile.income }
                     }
                 },
                 {
@@ -63,9 +70,9 @@ const getRelatedSchemes = async (req, res, next) => {
                         }
                     }
                 },
-                {
-                    $sort: { isEligible: -1, schemeName: 1 }
-                },
+                // {
+                //     $sort: { isEligible: -1, schemeName: 1 }
+                // },
                 {
 
                     $project: {
@@ -81,7 +88,7 @@ const getRelatedSchemes = async (req, res, next) => {
                         "eligibility.maxAge": 1,
                     }
                 }
-            ]).limit(10);
+            ])
             // {
             //     "eligibility.state": { $in: [user.profile.state, "All"] },
             //     "eligibility.category": { $in: [user.profile.category, "All"] },

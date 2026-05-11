@@ -14,14 +14,22 @@ const tokenService = TokenService;
 //This function is to Register the user 
 const Signup = async (req, res, next) => {
     try {
-        const { name, email, password} = req.body;
+        const { name, email, password , role} = req.body;
+        console.log(req.body);
+        console.log(typeof(role) , role);
         //creating the user data
-        const UserData = ({ name: name, email: email, password: password, role: "user" });
+        let UserData = {};
+        if(role=="admin"){
+              UserData = ({ name: name, email: email, password: password, role: "admin" });
+            }else{
+                UserData = ({ name: name, email: email, password: password, role: "user" });
+        }
         //User Service class used email search method
-        const UserExist = await UserService.findByEmail(UserSchema, email);
+        const Model = role=="admin"?Admin:UserSchema ;
+        const UserExist = await UserService.findByEmail(Model, email);
         if (UserExist) return next(new AppError("User already exists", 400));
         //User Service class used create user method
-        const User = await UserService.createUser(UserSchema,UserData);
+        const User = await UserService.createUser(Model,UserData);
         //send the response if the user is created
         if (User) { return res.status(201).json({ message: "User Resgistered Successfully", success: true }) }
     }
@@ -34,7 +42,7 @@ const Signup = async (req, res, next) => {
 const Login = async (req, res, next) => {
     try {
         const { email, password, role } = req.body;
-        console.log(req.body);
+        // console.log(req.body);
         //choosing model for searching
         const model = (role === "user") ? UserSchema : Admin;
         //UserService class for searching the userby email
@@ -47,7 +55,7 @@ const Login = async (req, res, next) => {
 
         //Json Token
         const token = TokenService.tokenGenerator(user._id, user.role);
-
+        // console.log(token);
         //Sending Response 
         res.status(200).json({
             message: "user is loggedIn Successfully",
@@ -55,7 +63,8 @@ const Login = async (req, res, next) => {
                 "id": user._id, "name": user.name,
                 "email": user.email,
                 "role": user.role,
-            }, token
+            }, 
+            "Token":token
         });
 
     }

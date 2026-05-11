@@ -3,8 +3,8 @@ const { rateLimit, ipKeyGenerator } = require('express-rate-limit');
 
 //Rate limiter for authentication routes (signup and login) fixed Winodow
 const authLimiter = rateLimit({
-    windowMs: 15 * 60 * 1000, // 15 minutes 
-    max: 5,
+    windowMs: 1 * 60 * 1000, // 15 minutes 
+    max: 10,
     message: { message: 'Too many login/signup attempts from this IP, please try again after 15 minutes' },
 
     standardHeaders: true,

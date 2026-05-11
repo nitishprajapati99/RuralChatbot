@@ -23,9 +23,8 @@ const Login = () => {
     
     try {
       // Logic-based URL selection
-      const url = formData.role === "admin" 
-        ? "http://localhost:5000/api/v1/admin/login" 
-        : "http://localhost:5000/api/v1/users/login";
+      const url = "http://localhost:5000/api/v1/users/login";
+      // console.log(formData);
 
       const response = await fetch(url, {
         method: "POST",
@@ -34,9 +33,10 @@ const Login = () => {
       });
 
       const result = await response.json();
+      console.log(result);
 
-      if (response.ok && result.token) {
-        localStorage.setItem("Token", result.token);
+      if (response.ok && result.Token) {
+        localStorage.setItem("Token", result.Token);
         localStorage.setItem("isAdmin", formData.role === "admin" ? "true" : "false");
         
         setSuccessMsg(`${formData.role.charAt(0).toUpperCase() + formData.role.slice(1)} logged in successfully!`);

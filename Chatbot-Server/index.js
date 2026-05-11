@@ -14,11 +14,11 @@ app.use(express.json());
 app.use(Cors());
 
 //Admin Routes 
-const AdminRoutes = require('./Routes/AdminRoutes.js');
-app.use('/api/v1/admin',AdminRoutes);
-//UserRoutes
-const usersRoute = require('./Routes/usersRoute.js');
-app.use('/api/v1/users',usersRoute);
+// const AdminRoutes = require('./Routes/AdminRoutes.js');
+// app.use('/api/v1/admin',AdminRoutes);
+//AuthRoute
+const AuthRoute = require('./Routes/AuthRoute.js');
+app.use('/api/v1/users',AuthRoute);
 // app.use("/chatbot", chatbotRoutes);
 const chatbotRoutes = require( './Routes/chatbot.js');
 app.use("/chatbot", chatbotRoutes);
