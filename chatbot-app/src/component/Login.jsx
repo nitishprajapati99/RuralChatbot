@@ -23,8 +23,9 @@ const Login = () => {
     
     try {
       // Logic-based URL selection
-      const url = "http://localhost:5000/api/v1/users/login";
-      // console.log(formData);
+      const url = formData.role === "admin" 
+        ? "http://localhost:5000/api/v1/admin/login" 
+        : "http://localhost:5000/api/v1/users/login";
 
       const response = await fetch(url, {
         method: "POST",

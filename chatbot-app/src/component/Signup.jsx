@@ -25,8 +25,10 @@ function SignupForm() {
 
     try {
       // Dynamic URL selection based on role
+
       const url = "http://localhost:5000/api/v1/users/signup";
      console.log(formData);
+
       const response = await fetch(url, {
         method: "POST",
         headers: { 'Content-Type': 'application/json' },

@@ -70,9 +70,9 @@ const getRelatedSchemes = async (req, res, next) => {
                         }
                     }
                 },
-                // {
-                //     $sort: { isEligible: -1, schemeName: 1 }
-                // },
+                {
+                    $sort: { isEligible: -1, schemeName: 1 }
+                },
                 {
 
                     $project: {
